@@ -1,7 +1,7 @@
 #################################################
 # NowVideo Ini file operation Class & Functions #
 #            by af_xj@hotmail.com               #
-#                Rev 20261022B                  #
+#                Rev 20261027A                  #
 #            (C) 25' 26' NowVideo               #
 #             Default License: MIT              #
 #  -------------------------------------------  #
