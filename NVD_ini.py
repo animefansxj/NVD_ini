@@ -3,7 +3,7 @@
 #            by af_xj@hotmail.com               #
 #                Rev 20261022B                  #
 #            (C) 25' 26' NowVideo               #
-#             Default License: GPL              #
+#             Default License: MIT              #
 #  -------------------------------------------  #
 #  If this source code is subject to a          #
 #  separately negotiated license agreement,     #
@@ -54,7 +54,7 @@ class Config:
                             HasFirstSections = True
                     if(re.search(r"\s*[\w\-_]+\s*=\s*[\w\{\}\-\[\]_,]+\s*",line)):
                         if(HasFirstSections):
-                            Key = re.findall(r"^\w+",line)[0]
+                            Key = re.findall(r"^\s*([\w\-_]+)",line)[0]
                             Value = re.findall(r"=\s*([\w\{\}\-\[\]_,]+)",line)[0]
                             self.__Sections[len(self.__Sections)-1].Items.append({'Key':Key,'Value':Value})
 
@@ -91,7 +91,7 @@ class Config:
             if(sIndex >= 0):
                 kIndex = 0
                 for Item in self.__Sections[sIndex].Items:
-                    if(Item['KeyName'] == KeyName):
+                    if(Item['Key'] == KeyName):
                         return kIndex
                     else:
                         kIndex += 1
@@ -123,7 +123,7 @@ class Config:
     def GetValue(self,SectionName:str,KeyName:str) -> str|None:
         if(self.__Loaded):
             SectionIndex = self.GetSectionIndex(SectionName)
-            if(SectionName < 0):
+            if(SectionIndex < 0):
                 return None
             else:
                 KeyIndex = self.GetKeyIndex(SectionName,KeyName)
