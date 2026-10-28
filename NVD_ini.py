@@ -1,7 +1,7 @@
 #################################################
 # NowVideo Ini file operation Class & Functions #
 #            by af_xj@hotmail.com               #
-#                Rev 20261027A                  #
+#                Rev 20261028A                  #
 #            (C) 25' 26' NowVideo               #
 #             Default License: MIT              #
 #  -------------------------------------------  #
@@ -21,10 +21,12 @@ import traceback
 class Section:
     Name: str
     Items: list[dict]
+    Comment: str|None
 
-    def __init__(self,Name:str):
+    def __init__(self,Name:str,Comment:str|None=None):
         self.Name = Name
         self.Items = [dict]
+        self.Comment = Comment
 
 class Config:
     __Path: str
@@ -43,7 +45,7 @@ class Config:
             self.__Context = File.readlines()
             if(len(self.__Context) < 1):
                 self.__Loaded = False
-                print(f"[X] Conf file {Path} is empty.")
+                print(f"[X] | Conf file {Path} is empty.")
                 return
 
             for line in self.__Context:
@@ -56,7 +58,11 @@ class Config:
                         if(HasFirstSections):
                             Key = re.findall(r"^\s*([\w\-_]+)",line)[0]
                             Value = re.findall(r"=\s*([\w\{\}\-\[\]_,]+)",line)[0]
-                            self.__Sections[len(self.__Sections)-1].Items.append({'Key':Key,'Value':Value})
+                            if(re.match(r"#[\w\-_,]+",line)):
+                                Comment = re.findall(r"#([\w\-_,]+)",line)[0]
+                            else:
+                                Comment = None
+                            self.__Sections[len(self.__Sections)-1].Items.append({'Key':Key,'Value':Value,'Comment':Comment})
 
             File.close()
 
@@ -67,7 +73,7 @@ class Config:
         except Exception as e:
             self.__Loaded = False
             Lib,LineNo,FuncName,Stnax = traceback.extract_tb(sys.exc_info()[2])[-1]
-            print(f"[X] Could not load conf from file: {self.__Path}.\n\t{e}\n\t{Lib}::{FuncName} ,Line {LineNo}: {Stnax}")
+            print(f"[X] | Could not load conf from file: {self.__Path}.\n    |\t{e}\n    |\t{Lib}::{FuncName} ,Line {LineNo}: {Stnax}")
 
 
     def isOK(self) -> bool:
@@ -142,10 +148,10 @@ class Config:
             return AltValue
 
     def Rush(self) -> None:
-        print("[i] Start rush the conf.")
+        print("[i] | Start rush the conf.")
         if(self.__Loaded):
             for Section in self.__Sections:
                 for Item in Section.Items:
-                    print(f"\t @{Section.Name}\t::\t {Item['Key']}: {Item['Value']}")
+                    print(f"    |\t @{Section.Name}\t::\t {Item['Key']}: {Item['Value']}")
         else:
-            print("[X] Conf not loaded.")
+            print("[X] | Conf not loaded.")
