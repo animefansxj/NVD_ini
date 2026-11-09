@@ -1,7 +1,7 @@
 #################################################
 # NowVideo Ini file operation Class & Functions #
 #            by af_xj@hotmail.com               #
-#                Rev 20261028A                  #
+#                Rev 20261109A                  #
 #            (C) 25' 26' NowVideo               #
 #             Default License: MIT              #
 #  -------------------------------------------  #
@@ -54,10 +54,10 @@ class Config:
                         self.__Sections.append(Section(line[1:-2]))
                         if(not HasFirstSections):
                             HasFirstSections = True
-                    if(re.search(r"\s*[\w\-_]+\s*=\s*[\w\{\}\-\[\]_,]+\s*",line)):
+                    if(re.search(r"\s*[\w\-_]+\s*=\s*[\w\{\}\-\[\]\(\)_,<>:/\\]+\s*",line)):
                         if(HasFirstSections):
                             Key = re.findall(r"^\s*([\w\-_]+)",line)[0]
-                            Value = re.findall(r"=\s*([\w\{\}\-\[\]_,]+)",line)[0]
+                            Value = re.findall(r"=\s*([\w\{\}\-\[\]\(\)_,<>:/\\]+)",line)[0]
                             if(re.match(r"#[\w\-_,]+",line)):
                                 Comment = re.findall(r"#([\w\-_,]+)",line)[0]
                             else:
